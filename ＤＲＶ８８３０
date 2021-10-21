@@ -1,0 +1,29 @@
+#include "mcc_generated_files/mcc.h"
+#include "mcc_generated_files/examples/i2c1_master_example.h"
+
+void Forward(uint8_t Speed) {
+    Speed=Speed<<2;
+    Speed=Speed+0b10;
+    I2C1_Write1ByteRegister(0x63, 0x00, Speed);
+    I2C1_Write1ByteRegister(0x64, 0x00, Speed);
+    __delay_ms(500);
+}
+
+void Back(uint8_t Speed) {
+    Speed=Speed<<2;
+    Speed=Speed+0b01;
+    I2C1_Write1ByteRegister(0x63, 0x00, Speed);
+    I2C1_Write1ByteRegister(0x64, 0x00, Speed);
+    __delay_ms(500);
+}
+
+void main(void) {
+    SYSTEM_Initialize();
+    while (1) {
+        //Speed 0x06-0x3F
+        Forward(0x16);
+        __delay_ms(2000);
+        Back(0x2F);
+        __delay_ms(2000);
+    }
+}
